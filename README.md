@@ -17,7 +17,7 @@ This quickstart is written specifically for mobile iOS and Android apps that are
 
 ## RUNNING THE SHAPES APP WITHOUT APPROOV
 
-Open the `ShapesApp.sln` solution in the `ShapesApp` folder using `File->Open` in Visual Studio. There are two projects in the solution, one targeting iOS and another targeting Android OS. We will use the iOS version in this document however there are minor differences with the Android application, i.e. codesigning and generating `.ipa` or `.apk` files.
+Open the `ShapesApp.sln` solution in the `ShapesApp` folder using `File->Open` in Visual Studio. There are two projects in the solution, one targeting iOS and another targeting Android OS. We will use the iOS version in this document however there are minor differences with the Android application, i.e. codesigning and generating `.ipa` or `.apk` files. Regardless of which OS you choose to target, most of the source code is shared and is available in the common project `ShapesApp`. You can target your prefered platform by selecting the Build target of Visual Studio.
 
 Ensure the `ShapesApp.iOS` or the `Shapes.Droid` project is selected in the Solution panel and also the Build target of Visual Studio. If running the iOS application, select the `Info.plist` file and change the Bundle Identifier to contain a unique string (i.e. your company name), since Apple will reject the default one. Select the appropriate device/simulator target and run the ShapesApp application.
 
@@ -27,13 +27,13 @@ Once the application is running you will see two buttons:
     <img src="readme-images/app-startup.png" width="256" title="Shapes App Startup">
 </p>
 
-Click on the `Hello`/Left button and you should see this:
+Click on the `Hello` button and you should see this:
 
 <p>
     <img src="readme-images/hello-okay.png" width="256" title="Hello Okay">
 </p>
 
-This checks the connectivity by connecting to the endpoint `https://shapes.approov.io/v1/hello`. Now press the `Shape`/Right button and you will see this:
+This checks the connectivity by connecting to the endpoint `https://shapes.approov.io/v1/hello`. Now press the `Shape` button and you will see this:
 
 <p>
     <img src="readme-images/shapes-bad.png" width="256" title="Shapes Bad">
@@ -85,81 +85,65 @@ If you are working with the Android application, select the `Assets` folder and 
 
 ## MODIFY THE APP TO USE APPROOV
 
-To use Approov all you have to do is comment out the code using `HttpClient` and document the line following that code, which enables the custom `ApproovHttpClient` code. If using the iOS project, find the following lines in `ViewController.cs` source file:
+To use Approov all you have to do is comment out the code using `HttpClient` and document the line following that code, which enables the custom `ApproovHttpClient` code. If using the iOS project, find the following lines in `GetShapePlatform.cs` source file:
 ```C#
 /* Comment out the line to use Approov SDK */
-private HttpClient httpClient;
+private static HttpClient httpClient;
 /* Uncomment the line to use Approov SDK */
-//private IosApproovHttpClient httpClient;
-
-public ViewController(IntPtr handle) : base(handle)
+//private static IosApproovHttpClient httpClient;
+public GetShapePlatform()
 {
     /* Comment out the line to use Approov SDK */
     httpClient = new HttpClient
-    /* Comment out the line to use Approov SDK */
+    /* Uncomment the line to use Approov SDK */
     //httpClient = new IosApproovHttpClient
     {
 ```
 Change the commented out lines so the code becomes:
 ```C#
 /* Comment out the line to use Approov SDK */
-//private HttpClient httpClient;
+//private static HttpClient httpClient;
 /* Uncomment the line to use Approov SDK */
-private IosApproovHttpClient httpClient;
-
-public ViewController(IntPtr handle) : base(handle)
+private static IosApproovHttpClient httpClient;
+public GetShapePlatform()
 {
     /* Comment out the line to use Approov SDK */
     //httpClient = new HttpClient
-    /* Comment out the line to use Approov SDK */
+    /* Uncomment the line to use Approov SDK */
     httpClient = new IosApproovHttpClient
     {
 ```
 
-Similarly, if you are using Android, find the following lines in `MainActivity.cs`:
+Similarly, if you are using Android, find the following lines in `GetShapePlatform.cs`:
 ```C#
-/* Without Approov */
-private HttpClient httpClient;
-/* With Approov */
-//private AndroidApproovHttpClient httpClient;
-protected override void OnCreate(Bundle savedInstanceState)
+/* Comment out the line to use Approov SDK */
+private static HttpClient httpClient;
+/* Uncomment the line to use Approov SDK */
+//private static AndroidApproovHttpClient httpClient;
+public GetShapePlatform()
 {
-    base.OnCreate(savedInstanceState);
-    Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-    SetContentView(Resource.Layout.activity_main);
-
-    Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
-    SetSupportActionBar(toolbar);
-
-    /* Without Approov */
+    /* Comment out the line to use Approov SDK */
     httpClient = new HttpClient
-    /* With Approov */
-    // httpClient = new AndroidApproovHttpClient
+    /* Uncomment the line to use Approov SDK */
+    //httpClient = new AndroidApproovHttpClient
     {
 ```
 Change the commented out lines so the code becomes:
 ```C#
-/* Without Approov */
-//private HttpClient httpClient;
-/* With Approov */
-private AndroidApproovHttpClient httpClient;
-protected override void OnCreate(Bundle savedInstanceState)
+/* Comment out the line to use Approov SDK */
+//private static HttpClient httpClient;
+/* Uncomment the line to use Approov SDK */
+private static AndroidApproovHttpClient httpClient;
+public GetShapePlatform()
 {
-    base.OnCreate(savedInstanceState);
-    Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-    SetContentView(Resource.Layout.activity_main);
-
-    Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
-    SetSupportActionBar(toolbar);
-
-    /* Without Approov */
+    /* Comment out the line to use Approov SDK */
     //httpClient = new HttpClient
-    /* With Approov */
+    /* Uncomment the line to use Approov SDK */
     httpClient = new AndroidApproovHttpClient
     {
 ```
 
-You will also need to add the `using Approov;` directive to the top of the `ViewController.cs`/`MainActivity.cs` source file.
+You will also need to add the `using Approov;` directive to the top of the `GetShapePlatform.cs` source file.
 The `IosApproovHttpClient`/`AndroidApproovHttpClient` class adds the `Approov-Token` header and also applies pinning for the connections to ensure that no Man-in-the-Middle can eavesdrop on any communication being made. 
 
 ## REGISTER YOUR APP WITH APPROOV
@@ -179,6 +163,7 @@ registering app ShapesApp
  3n4i6H5fQAXwSBkmDZVCtt+IoEp/Jr+0ONKpQkw5D10=com.criticalblue.ShapesApp-1.0[1.0]-4289  SDK:iOS(2.2.3)
 registration successful
 ```
+Building an Android `apk` using the `Archive` option is very similar but please make sure to verify the Android project `Linker Options` in the `Android Build` settings are set to `Don't Link`, otherwise the building step will fail. At the time of writing this README there is a bug in the latest version of `Xamarin.Forms` (Version="4.7.0.1080") where [building fails de to problems with AndroidManifest file](https://github.com/xamarin/Xamarin.Forms/issues/11233). Please follow the solution in the bug report to build the `ShapesApp` apk file or use the provided `Xamarin.Forms` package version (Version="4.5.0.356").
 
 ## RUNNING THE SHAPES APP WITH APPROOV
 
@@ -190,7 +175,7 @@ If using Mac OS Catalina and targeting iOS, simply drag the `ipa` file to the de
 Launch the app and press the `Shape` button. You should now see this (or another shape):
 
 <p>
-    <img src="readme-images/shapes-good.jpeg" width="256" title="Shapes Good">
+    <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
 </p>
 
 This means that the app is getting a validly signed Approov token to present to the shapes endpoint.

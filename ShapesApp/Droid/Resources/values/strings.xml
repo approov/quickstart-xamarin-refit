@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
-    <string name="app_name">ShapesApp</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello">Hello</string>
-    <string name="shape">Shape</string>
-</resources>
