@@ -3,8 +3,8 @@
 This quickstart is written specifically for mobile iOS and Android apps that are written in C# for making the API calls that you wish to protect with Approov. The sample code shown in this guide makes use of [Refit](https://github.com/reactiveui/refit), an automatic type-safe REST library. If this is not your situation then check if there is a more relevant quickstart guide available.
 
 ## WHAT YOU WILL NEED
-* Access to either the demo account ([request access here](https://info.approov.io/demo-token)) or a trial/paid Approov account
-* The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with environment variable `APPROOV_MANAGEMENT_TOKEN` set with your account access token
+* Access to a trial or paid Approov account
+* The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
 * [Visual Studio](https://visualstudio.microsoft.com/vs/mac/) with Xamarin extensions (Mac version 8.6.2 is used in this guide)
 * The contents of the folder containing this README
 * An Apple mobile device with iOS 10 or higher or an Android 5.0+ device. Alternatively, iOS simulator or Android emulator would suffice
