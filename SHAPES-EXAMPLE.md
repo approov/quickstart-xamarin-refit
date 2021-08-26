@@ -1,0 +1,187 @@
+# Shapes Example
+
+This quickstart is written specifically for native iOS apps that are written in Swift for making the API calls that you wish to protect with Approov. This quickstart provides a step-by-step example of integrating Approov into an app using a simple `Shapes` example that shows a geometric shape based on a request to an API backend that can be protected with Approov.
+
+## WHAT YOU WILL NEED
+* Access to a trial or paid Approov account
+* The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
+* [Visual Studio](https://visualstudio.microsoft.com/vs/mac/) with Xamarin extensions (Mac version 8.6.2 is used in this guide)
+* The contents of the folder containing this README
+* An Apple mobile device with iOS 10 or higher or an Android 5.0+ device. Alternatively, iOS simulator or Android emulator would suffice
+
+
+## RUNNING THE SHAPES APP WITHOUT APPROOV
+
+Open the `ShapesApp.sln` solution in the `ShapesApp` folder using `File->Open` in Visual Studio. There are two projects in the solution, one targeting iOS and another targeting Android OS. We will use the iOS version in this document however there are minor differences with the Android application, i.e. codesigning and generating `.ipa` or `.apk` files. Regardless of which OS you choose to target, most of the source code is shared and is available in the common project `ShapesApp`. You can target your prefered platform by selecting the Build target of Visual Studio.
+
+Ensure the `ShapesApp.iOS` or the `Shapes.Droid` project is selected in the Solution panel and also the Build target of Visual Studio. If running the iOS application, select the `Info.plist` file and change the Bundle Identifier to contain a unique string (i.e. your company name), since Apple will reject the default one. Select the appropriate device/simulator target and run the ShapesApp application.
+
+Once the application is running you will see two buttons:
+
+<p>
+    <img src="readme-images/app-startup.png" width="256" title="Shapes App Startup">
+</p>
+
+Click on the `Hello` button and you should see this:
+
+<p>
+    <img src="readme-images/hello-okay.png" width="256" title="Hello Okay">
+</p>
+
+This checks the connectivity by connecting to the endpoint `https://shapes.approov.io/v1/hello`. Now press the `Shape` button and you will see this:
+
+<p>
+    <img src="readme-images/shapes-bad.png" width="256" title="Shapes Bad">
+</p>
+
+This contacts `https://shapes.approov.io/v2/shapes` to get the name of a random shape. It gets the status code 400 (`Bad Request`) because this endpoint is protected with an Approov token. Next, you will add Approov into the app so that it can generate valid Approov tokens and get shapes.
+
+
+## ADD THE APPROOV SDK ENABLED REFIT PACKAGE
+
+The ApproovSDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient`. It needs a slightly modified `Refit` package using that specific implementation, and it is available as a NuGet package in the default repository `nuget.org`. You will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. Making sure you are selecting the appropriate project (either `ShapesApp.Droid` or `ShapesApp.iOS` depending on which platform you are targeting) select `Project` and `Manage NuGet Packages...`  and click on `Installed`; remove the `Refit` package. Select `Browse` and search for the `ApproovRefit` package. Select and install the package.
+
+![Add ApproovSDK Package](readme-images/add-approovsdk-package.png)
+
+You will also need to install the custom `ApproovHttpClient` implementation, wich consists of the platform independent package `ApproovHttpClient` and its corresponding iOS/Android implementations `ApproovHttpClient-Platform-Specific`.
+
+![Add HttpClient Package](readme-images/add-http-client-package.png)
+
+## ADD THE APPROOV SDK
+
+The ApproovSDK is available as a NuGet package and at the time of writing this quickstart, the packages name and version is `ApproovSDK`(2.4.0).
+
+![Add ApproovSDK Package](readme-images/add-approov-sdk-package.png)
+
+Your project structure should now look like this:
+
+![Final Project View](readme-images/final-project-view.png)
+
+## ENSURE THE SHAPES API IS PROTECTED
+
+In order for Approov tokens to be generated for `https://shapes.approov.io/v2/shapes` it is necessary to inform Approov about it. If you are using a demo account this is unnecessary as it is already set up. For a trial account do:
+```
+$ approov api -add shapes.approov.io
+```
+Tokens for this domain will be automatically signed with the specific secret for this domain, rather than the normal one for your account.
+
+## SETUP YOUR APPROOV CONFIGURATION
+
+The Approov SDK needs a configuration string to identify the account associated with the app. Obtain it using:
+```
+$ approov sdk -getConfig approov-initial.config
+```
+We need to add the text file to our project and ensure it gets copied to the root directory of our app upon installation. In Visual Studio right click on the `Shapes.iOS`, select `Add` and then `Existing Files...` and select the `approov-initial.config` file. Make sure the `Copy the file to the directory` option is selected in the following options dialog. 
+
+We now need to tell Visual Studio to copy the `approov-initial.config` during the app installation process by treating it as a resource bundle file. To do so, we right click on the `approov-initial.config` file and select `Build Action` and then `BundleResource`. 
+
+If you are working with the Android application, select the `Assets` folder and similarly add the text file by making sure it is copied to the destination, rather than accessed as a link. There is no `BundleResource` in Android but the equivalent option is `AndroidAsset`. Make sure the `Build Action` is set to `AndroidAsset` otherwise the Approov SDK will not be initialized.
+
+![Bundle Resource](readme-images/bundle-resource.png)
+
+## MODIFY THE APP TO USE APPROOV
+
+To use Approov all you have to do is comment out the code using `HttpClient` and document the line following that code, which enables the custom `ApproovHttpClient` code. If using the iOS project, find the following lines in `GetShapePlatform.cs` source file:
+```C#
+/* Comment out the line to use Approov SDK */
+private static HttpClient httpClient;
+/* Uncomment the line to use Approov SDK */
+//private static IosApproovHttpClient httpClient;
+public GetShapePlatform()
+{
+    /* Comment out the line to use Approov SDK */
+    httpClient = new HttpClient
+    /* Uncomment the line to use Approov SDK */
+    //httpClient = new IosApproovHttpClient
+    {
+```
+Change the commented out lines so the code becomes:
+```C#
+/* Comment out the line to use Approov SDK */
+//private static HttpClient httpClient;
+/* Uncomment the line to use Approov SDK */
+private static IosApproovHttpClient httpClient;
+public GetShapePlatform()
+{
+    /* Comment out the line to use Approov SDK */
+    //httpClient = new HttpClient
+    /* Uncomment the line to use Approov SDK */
+    httpClient = new IosApproovHttpClient
+    {
+```
+
+Similarly, if you are using Android, find the following lines in `GetShapePlatform.cs`:
+```C#
+/* Comment out the line to use Approov SDK */
+private static HttpClient httpClient;
+/* Uncomment the line to use Approov SDK */
+//private static AndroidApproovHttpClient httpClient;
+public GetShapePlatform()
+{
+    /* Comment out the line to use Approov SDK */
+    httpClient = new HttpClient
+    /* Uncomment the line to use Approov SDK */
+    //httpClient = new AndroidApproovHttpClient
+    {
+```
+Change the commented out lines so the code becomes:
+```C#
+/* Comment out the line to use Approov SDK */
+//private static HttpClient httpClient;
+/* Uncomment the line to use Approov SDK */
+private static AndroidApproovHttpClient httpClient;
+public GetShapePlatform()
+{
+    /* Comment out the line to use Approov SDK */
+    //httpClient = new HttpClient
+    /* Uncomment the line to use Approov SDK */
+    httpClient = new AndroidApproovHttpClient
+    {
+```
+
+You will also need to add the `using Approov;` directive to the top of the `GetShapePlatform.cs` source file.
+The `IosApproovHttpClient`/`AndroidApproovHttpClient` class adds the `Approov-Token` header and also applies pinning for the connections to ensure that no Man-in-the-Middle can eavesdrop on any communication being made. 
+
+## REGISTER YOUR APP WITH APPROOV
+
+In order for Approov to recognize the app as being valid it needs to be registered with the service. This requires building an `.ipa`/`.aar` file using the `Archive` option of Visual Studio (this option will not be available if using the simulator for iOS). Enabling codesigning is beyond the scope of this guide, if you need assistance please check [Microsoft's codesigning support](https://docs.microsoft.com/en-us/xamarin/ios/deploy-test/provisioning/) or [Android deploy signing](https://docs.microsoft.com/en-us/xamarin/android/deploy-test/signing/?tabs=macos). Make sure you have selected the correct project (Shapes.App.iOS), build mode (Release) and target device (Generic Device) settings. 
+
+![Target Device](readme-images/target-device.png)
+
+Select the `Build` menu and then `Archive for Publishing`. Once the archive file is ready you can either `Ad Hoc`, `Enterprise` or `Play Store` depending on the platform, sign it and save it to disk.
+
+![Build IPA Result](readme-images/build-ipa-result.png)
+
+You can now register the ios application with the Approov service:
+```
+$ approov registration -add ShapesApp.ipa
+```
+Building an Android `apk` using the `Archive` option is very similar but please make sure to verify the Android project `Linker Options` in the `Android Build` settings are set to `Don't Link`, otherwise the building step will fail. 
+
+## RUNNING THE SHAPES APP WITH APPROOV
+
+Install the `ApproovShapes.ipa` or `.apk` file that you just registered on the device. You will need to remove the old app from the device first.
+If using Mac OS Catalina and targeting iOS, simply drag the `ipa` file to the device. Alternatively, using `Xcode` you can select `Window`, then `Devices and Simulators` and after selecting your device click on the small `+` sign to locate the `ipa` archive you would like to install. For Android you will need to use the command line tools provided by Google.
+
+![Install IPA Visual Studio](readme-images/install-ipa.png)
+
+Launch the app and press the `Shape` button. You should now see this (or another shape):
+
+<p>
+    <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
+</p>
+
+This means that the app is getting a validly signed Approov token to present to the shapes endpoint.
+
+## WHAT IF I DON'T GET SHAPES
+
+If you still don't get a valid shape then there are some things you can try. Remember this may be because the device you are using has some characteristics that cause rejection for the currently set [Security Policy](https://approov.io/docs/latest/approov-usage-documentation/#security-policies) on your account:
+
+* Ensure that the version of the app you are running is exactly the one you registered with Approov.
+* If you are running the app from a debugger then valid tokens are not issued.
+* Look at the [`syslog`](https://developer.apple.com/documentation/os/logging) output from the device. Information about any Approov token fetched or an error is printed, e.g. `Approov: Approov token for host: https://approov.io : {"anno":["debug","allow-debug"],"did":"/Ja+kMUIrmd0wc+qECR0rQ==","exp":1589484841,"ip":"2a01:4b00:f42d:2200:e16f:f767:bc0a:a73c","sip":"YM8iTv"}`. You can easily [check](https://approov.io/docs/latest/approov-usage-documentation/#loggable-tokens) the validity.
+
+If you have a trial (as opposed to demo) account you have some additional options:
+* Consider using an [Annotation Policy](https://approov.io/docs/latest/approov-usage-documentation/#annotation-policies) during development to directly see why the device is not being issued with a valid token.
+* Use `approov metrics` to see [Live Metrics](https://approov.io/docs/latest/approov-usage-documentation/#live-metrics) of the cause of failure.
+* You can use a debugger and get valid Approov tokens on a specific device by [whitelisting](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy).
