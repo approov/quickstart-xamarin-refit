@@ -65,19 +65,6 @@ $ approov api -add shapes.approov.io
 ```
 Tokens for this domain will be automatically signed with the specific secret for this domain, rather than the normal one for your account.
 
-## SETUP YOUR APPROOV CONFIGURATION
-
-The Approov SDK needs a configuration string to identify the account associated with the app. Obtain it using:
-```
-$ approov sdk -getConfig approov-initial.config
-```
-We need to add the text file to our project and ensure it gets copied to the root directory of our app upon installation. In Visual Studio right click on the `Shapes.iOS`, select `Add` and then `Existing Files...` and select the `approov-initial.config` file. Make sure the `Copy the file to the directory` option is selected in the following options dialog. 
-
-We now need to tell Visual Studio to copy the `approov-initial.config` during the app installation process by treating it as a resource bundle file. To do so, we right click on the `approov-initial.config` file and select `Build Action` and then `BundleResource`. 
-
-If you are working with the Android application, select the `Assets` folder and similarly add the text file by making sure it is copied to the destination, rather than accessed as a link. There is no `BundleResource` in Android but the equivalent option is `AndroidAsset`. Make sure the `Build Action` is set to `AndroidAsset` otherwise the Approov SDK will not be initialized.
-
-![Bundle Resource](readme-images/bundle-resource.png)
 
 ## MODIFY THE APP TO USE APPROOV
 
@@ -92,7 +79,7 @@ public GetShapePlatform()
     /* Comment out the line to use Approov SDK */
     httpClient = new HttpClient
     /* Uncomment the line to use Approov SDK */
-    //httpClient = new IosApproovHttpClient
+    //httpClient = new IosApproovHttpClient("<enter-your-config-string-here>")
     {
 ```
 Change the commented out lines so the code becomes:
@@ -106,7 +93,7 @@ public GetShapePlatform()
     /* Comment out the line to use Approov SDK */
     //httpClient = new HttpClient
     /* Uncomment the line to use Approov SDK */
-    httpClient = new IosApproovHttpClient
+    httpClient = new IosApproovHttpClient("<enter-your-config-string-here>")
     {
 ```
 
@@ -121,7 +108,7 @@ public GetShapePlatform()
     /* Comment out the line to use Approov SDK */
     httpClient = new HttpClient
     /* Uncomment the line to use Approov SDK */
-    //httpClient = new AndroidApproovHttpClient
+    //httpClient = new AndroidApproovHttpClient("<enter-your-config-string-here>")
     {
 ```
 Change the commented out lines so the code becomes:
@@ -135,9 +122,11 @@ public GetShapePlatform()
     /* Comment out the line to use Approov SDK */
     //httpClient = new HttpClient
     /* Uncomment the line to use Approov SDK */
-    httpClient = new AndroidApproovHttpClient
+    httpClient = new AndroidApproovHttpClient("<enter-your-config-string-here>")
     {
 ```
+
+The Approov SDK needs a configuration string to identify the account associated with the app. It will have been provided in the Approov onboarding email (it will be something like `#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=`). Copy this string replacing the text `<enter-your-config-string-here>`.
 
 You will also need to add the `using Approov;` directive to the top of the `GetShapePlatform.cs` source file.
 The `IosApproovHttpClient`/`AndroidApproovHttpClient` class adds the `Approov-Token` header and also applies pinning for the connections to ensure that no Man-in-the-Middle can eavesdrop on any communication being made. 

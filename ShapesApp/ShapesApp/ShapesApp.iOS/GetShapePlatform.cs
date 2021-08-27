@@ -22,7 +22,7 @@ namespace ShapesApp.iOS
             /* Comment out the line to use Approov SDK */
             httpClient = new HttpClient
             /* Uncomment the line to use Approov SDK */
-            //httpClient = new IosApproovHttpClient
+            //httpClient = new IosApproovHttpClient("<enter-your-config-string-here>")
             {
                 BaseAddress = new Uri("https://shapes.approov.io")
             };

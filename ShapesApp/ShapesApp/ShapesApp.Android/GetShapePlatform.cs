@@ -22,7 +22,7 @@ namespace ShapesApp.Droid
             /* Comment out the line to use Approov SDK */
             httpClient = new HttpClient
             /* Uncomment the line to use Approov SDK */
-            //httpClient = new AndroidApproovHttpClient
+            //httpClient = new AndroidApproovHttpClient("<enter-your-config-string-here>")
             {
                 BaseAddress = new Uri("https://shapes.approov.io")
             };
