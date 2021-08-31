@@ -49,7 +49,7 @@ You will also need to install the custom `ApproovHttpClient` implementation, wic
 
 ## ADD THE APPROOV SDK
 
-The ApproovSDK is available as a NuGet package and at the time of writing this quickstart, the packages name and version is `ApproovSDK`(2.4.0).
+The Approov SDK is available as a NuGet package in the default `nuget.org` repository.
 
 ![Add ApproovSDK Package](readme-images/add-approov-sdk-package.png)
 
