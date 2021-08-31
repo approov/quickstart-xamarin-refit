@@ -24,7 +24,7 @@ The Approov SDK is also available as a NuGet package in the repository `nuget.or
 
 ## USING THE APPROOV SDK ENABLED REFIT PACKAGE
 
-The `ApproovRefit` package makes use of a modified `HttpClient` class, `ApproovHttpClient` which mimics most the original functionality and is subclassed by the platform specific `IosApproovHttpClient` and `AndroidApproovHttpClient`. The only requirement is instantiating the platform specific client with an additional configuration string, specific to your account, obtained by the `approov` command line utility (it will be something like #123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=). Instantiating the platform specific clients can be done like so:
+The `ApproovRefit` package makes use of a modified `HttpClient` class, `ApproovHttpClient` which mimics most of the original functionality and is subclassed by the platform specific `IosApproovHttpClient` and `AndroidApproovHttpClient`. The only requirement is instantiating the platform specific client with an additional configuration string, specific to your account, obtained by the `approov` command line utility (it will be something like #123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=). Instantiating the platform specific clients can be done like so:
 
 ```C#
 string approovSDKConfig = "#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=";            
