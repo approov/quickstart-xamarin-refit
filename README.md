@@ -8,7 +8,7 @@ To follow this guide you should have received an onboarding email for a trial or
 
 ## ADDING THE APPROOV SDK ENABLED REFIT PACKAGE
 
-The ApproovSDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient`. It needs a slightly modified `Refit` package using that specific implementation, and it is available as a NuGet package in the default repository `nuget.org`. You will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. Making sure you are selecting the appropriate project (either `ShapesApp.Droid` or `ShapesApp.iOS` depending on which platform you are targeting) select `Project` and `Manage NuGet Packages...`  and click on `Installed`; remove the `Refit` package. Select `Browse` and search for the `ApproovRefit` package. Select and install the package.
+The ApproovSDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient`. It needs a slightly modified `Refit` package using that specific implementation, and it is available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
 
 ![Add ApproovSDK Package](readme-images/add-approovsdk-package.png)
 
@@ -21,6 +21,52 @@ You will also need to install the custom `ApproovHttpClient` implementation, wic
 The ApproovSDK is also available as a NuGet package and at the time of writing this quickstart, the packages name and version is `ApproovSDK`(2.7.0).
 
 ![Add ApproovSDK Package](readme-images/add-approov-sdk-package.png)
+
+## USING THE APPROOV SDK ENABLED REFIT PACKAGE
+
+The `ApproovRefit` package makes use of a modified `HttpClient` class, `ApproovHttpClient` which mimics most the original functionality and is subclassed by the platform specific `IosApproovHttpClient` and `AndroidApproovHttpClient`. The only requirement is instantiating the platform specific client with an additional configuration string, specific to your account, obtained by the `approov` command line utility (it will be something like #123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=). Instantiating the platform specific clients can be done like so:
+
+```C#
+string approovSDKConfig = "#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=";            
+httpClient = new IosApproovHttpClient(approovSDKConfig)
+{
+    BaseAddress = new Uri("https://shapes.approov.io")
+};
+try
+            {
+                apiClient = RestService.For<IApiInterface>(httpClient);
+            }
+catch (Exception ex)
+......
+```
+
+or for Android:
+
+```C#
+string approovSDKConfig = "#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=";            
+httpClient = new AndroidApproovHttpClient(approovSDKConfig)
+{
+    BaseAddress = new Uri("https://shapes.approov.io")
+};
+try
+            {
+                apiClient = RestService.For<IApiInterface>(httpClient);
+            }
+catch (Exception ex)
+......
+```
+
+The above sample code assumes the following definition for `IApiInterface`:
+
+```C#
+public interface IApiInterface
+    {
+        [Get("/v1/hello")]
+        Task<Dictionary<string, string>> GetHello();
+        [Get("/v2/shapes")]
+        Task<Dictionary<string, string>> GetShape();
+    }
+```
 
 ## CHECKING IT WORKS
 Initially you won't have set which API domains to protect, so the interceptor will not add anything. It will have called Approov though and made contact with the Approov cloud service. You will see logging from Approov saying `UNKNOWN_URL`.
