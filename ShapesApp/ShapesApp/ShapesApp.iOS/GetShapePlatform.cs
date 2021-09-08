@@ -16,16 +16,15 @@ namespace ShapesApp.iOS
         /* Comment out the line to use Approov SDK */
         private static HttpClient httpClient;
         /* Uncomment the line to use Approov SDK */
-        //private static IosApproovHttpClient httpClient;
+        //private static ApproovHttpClient httpClient;
         public GetShapePlatform()
         {
             /* Comment out the line to use Approov SDK */
-            httpClient = new HttpClient
-            /* Uncomment the line to use Approov SDK */
-            //httpClient = new IosApproovHttpClient("<enter-your-config-string-here>")
-            {
-                BaseAddress = new Uri("https://shapes.approov.io")
-            };
+            httpClient = new HttpClient();
+            /* Uncomment the lines bellow to use Approov SDK */
+            //var aFactory = new ApproovHttpClientFactory();
+            //httpClient = aFactory.GetApproovHttpClient("<enter-your-config-string-here>")
+            httpClient.BaseAddress = new Uri("https://shapes.approov.io");
             try
             {
                 apiClient = RestService.For<IApiInterface>(httpClient);

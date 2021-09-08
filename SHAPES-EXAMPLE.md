@@ -68,68 +68,39 @@ Tokens for this domain will be automatically signed with the specific secret for
 
 ## MODIFY THE APP TO USE APPROOV
 
-To use Approov all you have to do is comment out the code using `HttpClient` and document the line following that code, which enables the custom `ApproovHttpClient` code. If using the iOS project, find the following lines in `GetShapePlatform.cs` source file:
+To use Approov all you have to do is comment out the code using `HttpClient` and document the line following that code, which enables the custom `ApproovHttpClient` code. Find the following lines in `GetShapePlatform.cs` source file:
 ```C#
 /* Comment out the line to use Approov SDK */
 private static HttpClient httpClient;
 /* Uncomment the line to use Approov SDK */
-//private static IosApproovHttpClient httpClient;
+//private static ApproovHttpClient httpClient;
 public GetShapePlatform()
 {
     /* Comment out the line to use Approov SDK */
-    httpClient = new HttpClient
-    /* Uncomment the line to use Approov SDK */
-    //httpClient = new IosApproovHttpClient("<enter-your-config-string-here>")
-    {
+    httpClient = new HttpClient();
+    /* Uncomment the lines bellow to use Approov SDK */
+    //var aFactory = new ApproovHttpClientFactory();
+    //httpClient = aFactory.GetApproovHttpClient("<enter-your-config-string-here>")
 ```
 Change the commented out lines so the code becomes:
 ```C#
 /* Comment out the line to use Approov SDK */
 //private static HttpClient httpClient;
 /* Uncomment the line to use Approov SDK */
-private static IosApproovHttpClient httpClient;
+private static ApproovHttpClient httpClient;
 public GetShapePlatform()
 {
     /* Comment out the line to use Approov SDK */
-    //httpClient = new HttpClient
-    /* Uncomment the line to use Approov SDK */
-    httpClient = new IosApproovHttpClient("<enter-your-config-string-here>")
-    {
-```
-
-Similarly, if you are using Android, find the following lines in `GetShapePlatform.cs`:
-```C#
-/* Comment out the line to use Approov SDK */
-private static HttpClient httpClient;
-/* Uncomment the line to use Approov SDK */
-//private static AndroidApproovHttpClient httpClient;
-public GetShapePlatform()
-{
-    /* Comment out the line to use Approov SDK */
-    httpClient = new HttpClient
-    /* Uncomment the line to use Approov SDK */
-    //httpClient = new AndroidApproovHttpClient("<enter-your-config-string-here>")
-    {
-```
-Change the commented out lines so the code becomes:
-```C#
-/* Comment out the line to use Approov SDK */
-//private static HttpClient httpClient;
-/* Uncomment the line to use Approov SDK */
-private static AndroidApproovHttpClient httpClient;
-public GetShapePlatform()
-{
-    /* Comment out the line to use Approov SDK */
-    //httpClient = new HttpClient
-    /* Uncomment the line to use Approov SDK */
-    httpClient = new AndroidApproovHttpClient("<enter-your-config-string-here>")
-    {
+    //httpClient = new HttpClient();
+    /* Uncomment the lines bellow to use Approov SDK */
+    var aFactory = new ApproovHttpClientFactory();
+    httpClient = aFactory.GetApproovHttpClient("<enter-your-config-string-here>")
 ```
 
 The Approov SDK needs a configuration string to identify the account associated with the app. It will have been provided in the Approov onboarding email (it will be something like `#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=`). Copy this string replacing the text `<enter-your-config-string-here>`.
 
 You will also need to add the `using Approov;` directive to the top of the `GetShapePlatform.cs` source file.
-The `IosApproovHttpClient`/`AndroidApproovHttpClient` class adds the `Approov-Token` header and also applies pinning for the connections to ensure that no Man-in-the-Middle can eavesdrop on any communication being made. 
+The `ApproovHttpClient` class adds the `Approov-Token` header and also applies pinning for the connections to ensure that no Man-in-the-Middle can eavesdrop on any communication being made. 
 
 ## REGISTER YOUR APP WITH APPROOV
 
