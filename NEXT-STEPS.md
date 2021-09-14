@@ -57,3 +57,19 @@ If you are using [Token Binding](https://approov.io/docs/latest/approov-usage-do
 
 ### Token Prefetching
 If you wish to reduce the latency associated with fetching the first Approov token, then a call to `PrefetchApproovToken()` can be made immediately after the SDK has been initialized. This initiates the process of fetching an Approov token as a background task, so that a cached token is available immediately when subsequently needed, or at least the fetch time is reduced. Note that if this feature is being used with [Token Binding](https://approov.io/docs/latest/approov-usage-documentation/#token-binding) then the binding must be set prior to the prefetch, as changes to the binding invalidate any cached Approov token.
+
+
+### Build Dependencies
+The ApproovSDK nuget package contains the native Approov SDK for both Android and iOS. The Android library uses [OkHttp](https://square.github.io/okhttp/) and Xamarin automatically downloads and packages a `.jar` file which can cause a build error if any other nuget package your application is using, also uses the same library. You will get a multiple definition error like this:
+
+```
+Type okhttp3.FormBody$Builder is defined multiple times:  obj/Debug/lp/3/jl/okhttp3.jar:okhttp3/FormBody$Builder.class, obj/Debug/lp/2/jl/okhttp-3.12.12.jar:okhttp3/FormBody$Builder.class
+Compilation failed
+```
+
+The solution to this is to tell Xamarin to ignore one of the duplicate libraries (in this case we ignore okhttp3.jar) by adding the following assembly directive to your `AssemblyInfo.cs` project file:
+
+```C#
+[assembly: Java.Interop.DoNotPackage("okhttp3.jar")]
+[assembly: Java.Interop.DoNotPackage("okio.jar")]
+```
