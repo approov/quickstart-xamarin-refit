@@ -22,8 +22,8 @@ namespace ShapesApp.iOS
             /* Comment out the line to use Approov SDK */
             httpClient = new HttpClient();
             /* Uncomment the lines bellow to use Approov SDK */
-            //var aFactory = new ApproovHttpClientFactory();
-            //httpClient = aFactory.GetApproovHttpClient("<enter-your-config-string-here>")
+            //var factory = new ApproovHttpClientFactory();
+            //httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>");
             httpClient.BaseAddress = new Uri("https://shapes.approov.io");
             try
             {
