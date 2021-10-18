@@ -33,7 +33,7 @@ approov registration -add app.ipa
 
 [Managing Registrations](https://approov.io/docs/latest/approov-usage-documentation/#managing-registrations) provides more details for app registrations.
 
-Building an Android `apk` using the `Archive` option is very similar but please make sure to verify the Android project `Linker Options` in the `Android Build` settings are set to `Don't Link`, otherwise the building step will fail.
+Building an Android `apk` using the `Archive` option is very similar and should generate a codesigned apk file.
 
 ## BACKEND INTEGRATION
 In order to fully implement Approov you must verify the Approov token in your backend API. Various [Backend API Quickstarts](https://approov.io/docs/latest/approov-integration-examples/backend-api/) are availble to suit your particular situation.
@@ -67,7 +67,7 @@ Type okhttp3.FormBody$Builder is defined multiple times:  obj/Debug/lp/3/jl/okht
 Compilation failed
 ```
 
-The solution to this is to tell Xamarin to ignore one of the duplicate libraries (in this case we ignore okhttp3.jar) by adding the following assembly directive to your `AssemblyInfo.cs` project file:
+The solution to this is to tell Xamarin to ignore one of the duplicate libraries (in this case we ignore okhttp3.jar and its dependency, okio.jar) by adding the following assembly directive to your `AssemblyInfo.cs` project file:
 
 ```C#
 [assembly: Java.Interop.DoNotPackage("okhttp3.jar")]
