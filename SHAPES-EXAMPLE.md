@@ -79,8 +79,8 @@ public GetShapePlatform()
     /* Comment out the line to use Approov SDK */
     httpClient = new HttpClient();
     /* Uncomment the lines bellow to use Approov SDK */
-    //var aFactory = new ApproovHttpClientFactory();
-    //httpClient = aFactory.GetApproovHttpClient("<enter-your-config-string-here>")
+    //var factory = new ApproovHttpClientFactory();
+    //httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>")
 ```
 Change the commented out lines so the code becomes:
 ```C#
@@ -93,8 +93,8 @@ public GetShapePlatform()
     /* Comment out the line to use Approov SDK */
     //httpClient = new HttpClient();
     /* Uncomment the lines bellow to use Approov SDK */
-    var aFactory = new ApproovHttpClientFactory();
-    httpClient = aFactory.GetApproovHttpClient("<enter-your-config-string-here>")
+    var factory = new ApproovHttpClientFactory();
+    httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>")
 ```
 
 The Approov SDK needs a configuration string to identify the account associated with the app. It will have been provided in the Approov onboarding email (it will be something like `#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=`). Copy this string replacing the text `<enter-your-config-string-here>`.
@@ -116,7 +116,7 @@ You can now register the ios application with the Approov service:
 ```
 $ approov registration -add ShapesApp.ipa
 ```
-Building an Android `apk` using the `Archive` option is very similar but please make sure to verify the Android project `Linker Options` in the `Android Build` settings are set to `Don't Link`, otherwise the building step will fail. 
+Building an Android `apk` using the `Archive` option is very similar and should generate a signed apk file.
 
 ## RUNNING THE SHAPES APP WITH APPROOV
 
