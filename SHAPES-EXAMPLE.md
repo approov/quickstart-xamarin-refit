@@ -51,7 +51,7 @@ You will also need to install the custom `ApproovHttpClient` implementation, wic
 
 The Approov SDK is available as a NuGet package in the default `nuget.org` repository.
 
-![Add ApproovSDK Package](readme-images/add-approov-sdk-package.png)
+![Add ApproovSDK Package](readme-images/add-approovsdk-package.png)
 
 Your project structure should now look like this:
 

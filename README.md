@@ -20,7 +20,7 @@ You will also need to install the custom `ApproovHttpClient` implementation, wic
 
 The Approov SDK is also available as a NuGet package in the repository `nuget.org`, the packages name being `ApproovSDK`.
 
-![Add ApproovSDK Package](readme-images/add-approov-sdk-package.png)
+![Add ApproovSDK Package](readme-images/add-approovsdk-package.png)
 
 ## USING THE APPROOV SDK ENABLED REFIT PACKAGE
 
