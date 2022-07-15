@@ -6,6 +6,8 @@ This quickstart provides the basic steps for integrating Approov into your app. 
 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
+Note that the minimum OS requirement for iOS is 10 and for Android the minimum SDK version is 21 (Android 5.0). You cannot use Approov in apps that need to support OS versions older than this.
+
 ## ADDING THE APPROOV SDK ENABLED REFIT PACKAGE
 
 The ApproovSDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient`. It needs a slightly modified `Refit` package using that specific implementation, and it is available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
@@ -30,9 +32,9 @@ The `ApproovRefit` package makes use of a modified `HttpClient` class, `ApproovH
 var factory = new ApproovHttpClientFactory();
 httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>")
 try
-            {
-                apiClient = RestService.For<IApiInterface>(httpClient);
-            }
+{
+    apiClient = RestService.For<IApiInterface>(httpClient);
+}
 catch (Exception ex)
 ......
 ```
@@ -50,8 +52,6 @@ The following app permissions need to be available in the manifest to use Approo
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.INTERNET" />
 ```
-
-Note that the minimum SDK version you can use with the Approov package is 21 (Android 5.0). 
 
 Please [read this](https://approov.io/docs/latest/approov-usage-documentation/#targetting-android-11-and-above) section of the reference documentation if targetting Android 11 (API level 30) or above.
 
