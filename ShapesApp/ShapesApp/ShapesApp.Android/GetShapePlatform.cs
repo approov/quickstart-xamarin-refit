@@ -11,6 +11,9 @@ namespace ShapesApp.Droid
 {
     public class GetShapePlatform : IGetShape
     {
+        
+        /* The secret key: REPLACE with shapes_api_key_placeholder if using SECRET-PROTECTION */
+        string shapes_api_key = "yXClypapWNHIifHUWmBIyPFAm";
         // Refit API interface
         private IApiInterface apiClient;
         /* Comment out the line to use Approov SDK */
@@ -21,10 +24,12 @@ namespace ShapesApp.Droid
         {
             /* Comment out the line to use Approov SDK */
             httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Api-Key", shapes_api_key);
             /* Uncomment the lines bellow to use Approov SDK */
             //var factory = new ApproovHttpClientFactory();
             //httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>");
-            httpClient.BaseAddress = new Uri("https://shapes.approov.io");
+            // Add substitution header: Uncomment if using SECRET-PROTECTION
+            //AndroidApproovHttpClient.AddSubstitutionHeader("Api-Key", null);
             try
             {
                 apiClient = RestService.For<IApiInterface>(httpClient);

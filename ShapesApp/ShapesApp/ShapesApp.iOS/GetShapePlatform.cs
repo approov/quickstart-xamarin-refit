@@ -11,6 +11,8 @@ namespace ShapesApp.iOS
 {
     public class GetShapePlatform : IGetShape
     {
+        /* The secret key: REPLACE with shapes_api_key_placeholder if using SECRET-PROTECTION */
+        string shapes_api_key = "yXClypapWNHIifHUWmBIyPFAm";
         // Refit API interface
         private IApiInterface apiClient;
         /* Comment out the line to use Approov SDK */
@@ -24,6 +26,8 @@ namespace ShapesApp.iOS
             /* Uncomment the lines bellow to use Approov SDK */
             //var factory = new ApproovHttpClientFactory();
             //httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>");
+            // Add substitution header: Uncomment if using SECRET-PROTECTION
+            //IosApproovHttpClient.AddSubstitutionHeader("Api-Key", null);
             httpClient.BaseAddress = new Uri("https://shapes.approov.io");
             try
             {

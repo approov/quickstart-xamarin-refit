@@ -5,9 +5,9 @@ namespace ShapesApp.Droid
 {
     public interface IApiInterface
     {
-        [Get("/v1/hello")]
+        [Get("https://shapes.approov.io/v1/hello")]
         Task<Dictionary<string, string>> GetHello();
-        [Get("/v2/shapes")]
+        [Get("https://shapes.approov.io/v1/shapes/")]
         Task<Dictionary<string, string>> GetShape();
     }
 }
