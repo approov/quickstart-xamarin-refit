@@ -5,7 +5,7 @@ This quickstart is written specifically for native iOS apps that are written in 
 ## WHAT YOU WILL NEED
 * Access to a trial or paid Approov account
 * The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
-* [Visual Studio](https://visualstudio.microsoft.com/vs/mac/) with Xamarin extensions (Mac version 8.6.2 is used in this guide)
+* [Visual Studio](https://visualstudio.microsoft.com/vs/mac/) with Xamarin extensions (Mac version 17.0.6 is used in this guide)
 * The contents of the folder containing this README
 * An Apple mobile device with iOS 10 or higher or an Android 5.0+ device. Alternatively, iOS simulator or Android emulator would suffice
 
@@ -34,24 +34,24 @@ This checks the connectivity by connecting to the endpoint `https://shapes.appro
     <img src="readme-images/shapes-bad.png" width="256" title="Shapes Bad">
 </p>
 
-This contacts `https://shapes.approov.io/v2/shapes` to get the name of a random shape. It gets the status code 400 (`Bad Request`) because this endpoint is protected with an Approov token. Next, you will add Approov into the app so that it can generate valid Approov tokens and get shapes.
+This contacts `https://shapes.approov.io/v1/shapes` to get the name of a random shape. This endpoint is protected with an API key that is built into the code, and therefore can be easily extracted from the app. The subsequent steps of this guide show you how to provide better protection, either using an Approov Token or by migrating the API key to become an Approov managed secret.
 
 
 ## ADD THE APPROOV SDK ENABLED REFIT PACKAGE
 
 The ApproovSDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient`. It needs a slightly modified `Refit` package using that specific implementation, and it is available as a NuGet package in the default repository `nuget.org`. You will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. Making sure you are selecting the appropriate project (either `ShapesApp.Droid` or `ShapesApp.iOS` depending on which platform you are targeting) select `Project` and `Manage NuGet Packages...`  and click on `Installed`; remove the `Refit` package. Select `Browse` and search for the `ApproovRefit` package. Select and install the package.
 
-![Add ApproovSDK Package](readme-images/add-approovsdk-package.png)
+![Add ApproovSDK Package](readme-images/add-refit-package.png)
 
-You will also need to install the custom `ApproovHttpClient` implementation, wich consists of the platform independent package `ApproovHttpClient` and its corresponding iOS/Android implementations `ApproovHttpClient-Platform-Specific`.
+Since the `ApproovHttpClient` uses platform specific code you will need to add the NuGet packages to the `ShapesApp.Android` and `ShapesApp.iOS` projects instead of the generic `ShapesApp` project.
 
-![Add HttpClient Package](readme-images/add-http-client-package.png)
+![Add ApproovSDK Package](readme-images/add-nuget-packages.png)
 
 ## ADD THE APPROOV SDK
 
 The Approov SDK is available as a NuGet package in the default `nuget.org` repository.
 
-![Add ApproovSDK Package](readme-images/add-approovsdk-package.png)
+![Add ApproovSDK Package](readme-images/add-nuget-packages.png)
 
 Your project structure should now look like this:
 
@@ -59,7 +59,7 @@ Your project structure should now look like this:
 
 ## ENSURE THE SHAPES API IS PROTECTED
 
-In order for Approov tokens to be generated for `https://shapes.approov.io/v2/shapes` it is necessary to inform Approov about it.
+In order for Approov tokens to be generated for `https://shapes.approov.io` it is necessary to inform Approov about it.
 ```
 $ approov api -add shapes.approov.io
 ```
@@ -70,31 +70,31 @@ Tokens for this domain will be automatically signed with the specific secret for
 
 To use Approov all you have to do is comment out the code using `HttpClient` and document the line following that code, which enables the custom `ApproovHttpClient` code. Find the following lines in `GetShapePlatform.cs` source file:
 ```C#
-/* Comment out the line to use Approov SDK */
+/* COMMENT this line if using Approov */
 private static HttpClient httpClient;
-/* Uncomment the line to use Approov SDK */
+/* UNCOMMENT this line if using Approov */
 //private static ApproovHttpClient httpClient;
 public GetShapePlatform()
 {
-    /* Comment out the line to use Approov SDK */
+    /* COMMENT out the line to use Approov SDK */
     httpClient = new HttpClient();
-    /* Uncomment the lines bellow to use Approov SDK */
-    //var factory = new ApproovHttpClientFactory();
-    //httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>")
+    /* UNCOMMENT the lines bellow to use Approov SDK */
+    //ApproovService.Initialize("<enter-your-config-string-here>");
+    //httpClient = ApproovService.CreateHttpClient();
 ```
 Change the commented out lines so the code becomes:
 ```C#
-/* Comment out the line to use Approov SDK */
+/* COMMENT this line if using Approov */
 //private static HttpClient httpClient;
-/* Uncomment the line to use Approov SDK */
+/* UNCOMMENT this line if using Approov */
 private static ApproovHttpClient httpClient;
 public GetShapePlatform()
 {
-    /* Comment out the line to use Approov SDK */
+    /* COMMENT out the line to use Approov SDK */
     //httpClient = new HttpClient();
-    /* Uncomment the lines bellow to use Approov SDK */
-    var factory = new ApproovHttpClientFactory();
-    httpClient = factory.GetApproovHttpClient("<enter-your-config-string-here>")
+    /* UNCOMMENT the lines bellow to use Approov SDK */
+    ApproovService.Initialize("<enter-your-config-string-here>");
+    httpClient = ApproovService.CreateHttpClient();
 ```
 
 The Approov SDK needs a configuration string to identify the account associated with the app. It will have been provided in the Approov onboarding email (it will be something like `#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=`). Copy this string replacing the text `<enter-your-config-string-here>`.
@@ -143,3 +143,48 @@ If you still don't get a valid shape then there are some things you can try. Rem
 * Consider using an [Annotation Policy](https://approov.io/docs/latest/approov-usage-documentation/#annotation-policies) during development to directly see why the device is not being issued with a valid token.
 * Use `approov metrics` to see [Live Metrics](https://approov.io/docs/latest/approov-usage-documentation/#live-metrics) of the cause of failure.
 * You can use a debugger and get valid Approov tokens on a specific device by ensuring it [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy).
+
+# SHAPES APP WITH SECRETS PROTECTION
+
+This section provides an illustration of an alternative option for Approov protection if you are not able to modify the backend to add an Approov Token check. 
+
+Firstly, revert any previous change to `shapesURL` to using `https://shapes.approov.io/v1/shapes/` that simply checks for an API key. The `shapes_api_key` should also be changed to `shapes_api_key_placeholder`, removing the actual API key out of the code:
+
+```C#
+/* The endpoint version being used: v1 unprotected and v3 for Approov API protection */
+public const string endpointVersion = "v3";
+.....
+string shapes_api_key = "shapes_api_key_placeholder";
+....
+ApproovService.AddSubstitutionHeader("Api-Key", null);
+httpClient.DefaultRequestHeaders.Add("Api-Key", shapes_api_key);
+```
+
+Next we enable the [Secure Strings](https://approov.io/docs/latest/approov-usage-documentation/#secure-strings) feature:
+
+```
+approov secstrings -setEnabled
+```
+
+> Note that this command requires an [admin role](https://approov.io/docs/latest/approov-usage-documentation/#account-access-roles).
+
+You must inform Approov that it should map `shapes_api_key_placeholder` to `yXClypapWNHIifHUWmBIyPFAm` (the actual API key) in requests as follows:
+
+```
+approov secstrings -addKey shapes_api_key_placeholder -predefinedValue yXClypapWNHIifHUWmBIyPFAm
+```
+
+> Note that this command also requires an [admin role](https://approov.io/docs/latest/approov-usage-documentation/#account-access-roles).
+
+Build and run the app again to ensure that the `app-debug.apk` or `shapes-app.ipa` in the generated build outputs is up to date. You need to register the updated app with Approov. Change directory to the top level of the `shapes-app` project and then register the app with:
+
+```
+approov registration -add app/build/outputs/apk/debug/app-debug.apk
+```
+Run the app again without making any changes to the app and press the `Get Shape` button. You should now see this (or another shape):
+
+<p>
+    <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
+</p>
+
+This means that the registered app is able to access the API key, even though it is no longer embedded in the app configuration, and provide it to the shapes request.

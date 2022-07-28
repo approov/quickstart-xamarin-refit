@@ -5,9 +5,9 @@ namespace ShapesApp.iOS
 {
     public interface IApiInterface
     {
-        [Get("https://shapes.approov.io/v1/hello")]
+        [Get(GetShapePlatform.helloURL)]
         Task<Dictionary<string, string>> GetHello();
-        [Get("https://shapes.approov.io/v1/shapes/")]
+        [Get(GetShapePlatform.shapesURL)]
         Task<Dictionary<string, string>> GetShape();
     }
 }
