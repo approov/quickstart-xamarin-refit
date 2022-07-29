@@ -49,9 +49,7 @@ Since the `ApproovHttpClient` uses platform specific code you will need to add t
 
 ## ADD THE APPROOV SDK
 
-The Approov SDK is available as a NuGet package in the default `nuget.org` repository.
-
-![Add ApproovSDK Package](readme-images/add-nuget-packages.png)
+The Approov SDK is also available as a NuGet package in the default `nuget.org` repository.
 
 Your project structure should now look like this:
 
@@ -101,6 +99,17 @@ The Approov SDK needs a configuration string to identify the account associated 
 
 You will also need to add the `using Approov;` directive to the top of the `GetShapePlatform.cs` source file.
 The `ApproovHttpClient` class adds the `Approov-Token` header and also applies pinning for the connections to ensure that no Man-in-the-Middle can eavesdrop on any communication being made. 
+
+Finally, please, change the url to point to the Approov protected endpoint:
+
+```C#
+static string endpointVersion = "v1";
+```
+to point to `v3`:
+
+```C#
+static string endpointVersion = "v3";
+```
 
 ## REGISTER YOUR APP WITH APPROOV
 
