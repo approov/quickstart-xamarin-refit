@@ -12,7 +12,7 @@ Note that the minimum OS requirement for iOS is 10 and for Android the minimum S
 
 The Approov SDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient` and it is available as a NuGet package in the default repository `nuget.org`. It needs a slightly modified `Refit` package using that specific implementation, and it is also available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
 
-![Add ApproovSDK Package](readme-images/add-nuget-packages.png)
+![Add Refit Package](readme-images/add-refit-package.png)
 
 
 ## ADDING THE APPROOV SDK
@@ -21,7 +21,7 @@ The Approov SDK is also available as a NuGet package in the repository `nuget.or
 
 ![Add ApproovSDK Package](readme-images/add-nuget-packages.png)
 
-## USING THE APPROOV SDK ENABLED REFIT PACKAGE
+## USING THE APPROOV REFIT PACKAGE
 
 The `ApproovRefit` package makes use of a modified `HttpClient` class, `ApproovService` which mimics most of the original functionality.  Before using the `ApproovService` class, you need to initialize it with a configuration string. This will have been provided in your Approov onboarding email (it will be something like `#123456#K/XPlLtfcwnWkzv99Wj5VmAxo4CrU267J1KlQyoz8Qo=`). After initializing the `ApproovService` class, you can obtain an `ApproovHttpClient` and perform network requests:
 
@@ -64,7 +64,7 @@ To actually protect your APIs there are some further steps. Approov provides two
 
 * [API PROTECTION](https://github.com/approov/quickstart-xamarin-refit/blob/master/API-PROTECTION.md): You should use this if you control the backend API(s) being protected and are able to modify them to ensure that a valid Approov token is being passed by the app. An [Approov Token](https://approov.io/docs/latest/approov-usage-documentation/#approov-tokens) is short lived crytographically signed JWT proving the authenticity of the call.
 
-* [SECRETS PROTECTION](https://github.com/approov/quickstart-xamarin-refit/blob/masterSECRETS-PROTECTION.md): If you do not control the backend API(s) being protected, and are therefore unable to modify it to check Approov tokens, you can use this approach instead. It allows app secrets, and API keys, to be protected so that they no longer need to be included in the built code and are only made available to passing apps at runtime.
+* [SECRETS PROTECTION](https://github.com/approov/quickstart-xamarin-refit/blob/master/SECRETS-PROTECTION.md): If you do not control the backend API(s) being protected, and are therefore unable to modify it to check Approov tokens, you can use this approach instead. It allows app secrets, and API keys, to be protected so that they no longer need to be included in the built code and are only made available to passing apps at runtime.
 
 Note that it is possible to use both approaches side-by-side in the same app, in case your app uses a mixture of 1st and 3rd party APIs.
 
