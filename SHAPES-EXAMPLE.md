@@ -42,7 +42,7 @@ This contacts `https://shapes.approov.io/v1/shapes` to get the name of a random 
 
 The ApproovSDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient`. It needs a slightly modified `Refit` package using that specific implementation, and it is available as a NuGet package in the default repository `nuget.org`. You will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. Making sure you are selecting the appropriate project (either `ShapesApp.Droid` or `ShapesApp.iOS` depending on which platform you are targeting) select `Project` and `Manage NuGet Packages...`  and click on `Installed`; remove the `Refit` package. Select `Browse` and search for the `ApproovRefit` package. Select and install the package.
 
-![Add Refit Package](readme-images/add-refit-package.png)
+![Add Refit Package](readme-images/add-refit-package.jpg)
 
 Since the `ApproovHttpClient` uses platform specific code you will need to add the NuGet packages to the `ShapesApp.Android` and `ShapesApp.iOS` projects instead of the generic `ShapesApp` project.
 
