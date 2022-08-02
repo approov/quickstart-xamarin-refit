@@ -50,7 +50,7 @@ Since the `ApproovHttpClient` uses platform specific code you will need to add t
 
 ## ADD THE APPROOV SDK
 
-The Approov SDK is also available as a NuGet package in the default `nuget.org` repository, and is convinently named `ApproovSDK`.
+The Approov SDK is also available as a NuGet package in the default `nuget.org` repository, and is convenently named `ApproovSDK`.
 
 Your project structure should now look like this:
 
