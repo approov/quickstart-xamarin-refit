@@ -12,7 +12,7 @@ Note that the minimum OS requirement for iOS is 10 and for Android the minimum S
 
 The Approov SDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient` and it is available as a NuGet package in the default repository `nuget.org`. It needs a slightly modified `Refit` package using that specific implementation, and it is also available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
 
-![Add Refit Package](readme-images/add-refit-package.png)
+![Add Refit Package](readme-images/add-refit-package.jpg)
 
 
 ## ADDING THE APPROOV SDK
