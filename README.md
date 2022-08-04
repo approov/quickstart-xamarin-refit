@@ -7,17 +7,18 @@ This quickstart provides the basic steps for integrating Approov into your app. 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
 Note that the minimum OS requirement for iOS is 10 and for Android the minimum SDK version is 21 (Android 5.0). You cannot use Approov in apps that need to support OS versions older than this.
+We will use the latest versions of the `nuget.org` packages, `ApproovSDK-3.0.0`, `ApproovHttpClient-3.0.7` and `ApproovRefit` version `6.0.94`. 
 
 ## ADDING THE APPROOV SDK ENABLED REFIT PACKAGE
 
-The Approov SDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient` and it is available as a NuGet package in the default repository `nuget.org`. It needs a slightly modified `Refit` package using that specific implementation, and it is also available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
+ The Approov SDK needs a slightly modified `Refit` package using a specific implementation, and it is  available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
 
 ![Add Refit Package](readme-images/add-refit-package.jpg)
 
 
-## ADDING THE APPROOV SDK
+## ADDING THE APPROOV SDK AND THE CUSTOM HTTP CLIENT
 
-The Approov SDK is also available as a NuGet package in the repository `nuget.org`, the packages name being `ApproovSDK`.
+The Approov SDK makes use of a custom `HttpClient` implementation, `ApproovHttpClient` and it is available as a NuGet package in the default repository `nuget.org` alongside the actual SDK which is  `ApproovSDK`. 
 
 ![Add ApproovSDK Package](readme-images/add-nuget-packages.png)
 
