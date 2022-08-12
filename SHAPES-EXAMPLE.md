@@ -58,10 +58,12 @@ Your project structure should now look like this:
 
 ## ENSURE THE SHAPES API IS PROTECTED
 
-In order for Approov tokens to be generated for `https://shapes.approov.io` it is necessary to inform Approov about it.
+In order for Approov tokens to be generated for `https://shapes.approov.io` it is necessary to inform Approov about it:
+
 ```
-$ approov api -add shapes.approov.io
+approov api -add shapes.approov.io
 ```
+
 Tokens for this domain will be automatically signed with the specific secret for this domain, rather than the normal one for your account.
 
 
@@ -122,10 +124,12 @@ Select the `Build` menu and then `Archive for Publishing`. Once the archive file
 
 ![Build IPA Result](readme-images/build-ipa-result.png)
 
-You can now register the ios application with the Approov service:
+You can now register the iOS application with Approov:
+
 ```
-$ approov registration -add ShapesApp.ipa
+approov registration -add ShapesApp.ipa
 ```
+
 Building an Android `apk` using the `Archive` option is very similar and should generate a signed apk file.
 
 ## RUNNING THE SHAPES APP WITH APPROOV
