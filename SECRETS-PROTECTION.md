@@ -102,6 +102,8 @@ Add the local certificate used to sign apps in Android Studio. The following ass
 approov appsigncert -add ~/.android/debug.keystore -storePassword android -autoReg
 ```
 
+Note, on Windows you need to substitute \ for / in the above command and the full path specified for the user home directory instead of ~.
+
 See [Android App Signing Certificates](https://approov.io/docs/latest/approov-usage-documentation/#android-app-signing-certificates) if your keystore format is not recognized or if you have any issues adding the certificate. This also provides information about adding certificates for when releasing to the Play Store. Note also that you need to apply specific [Android Obfuscation](https://approov.io/docs/latest/approov-usage-documentation/#android-obfuscation) rules when creating an app release.
 
 ### iOS
