@@ -2,11 +2,12 @@
 
 This quickstart is written specifically for mobile iOS and Android apps that are written in C# for making the API calls that you wish to protect with Approov. The sample code shown in this guide makes use of [Refit](https://github.com/reactiveui/refit), an automatic type-safe REST library. If this is not your situation then check if there is a more relevant quickstart guide available.
 
-This quickstart provides the basic steps for integrating Approov into your app. A more detailed step-by-step guide using a [Shapes App Example](https://github.com/approov/quickstart-xamarin-refit/blob/master/SHAPES-EXAMPLE.md) is also available.
+This page provides all the steps for integrating Approov into your app. Additionally, a step-by-step tutorial guide using our [Shapes App Example](https://github.com/approov/quickstart-xamarin-refit/blob/master/SHAPES-EXAMPLE.md) is also available.
 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
 Note that the minimum OS requirement for iOS is 10 and for Android the minimum SDK version is 21 (Android 5.0). You cannot use Approov in apps that need to support OS versions older than this.
+
 We will use the latest versions of the `nuget.org` packages, `ApproovSDK-3.1.2`, `ApproovHttpClient-3.1.0` and `ApproovRefit` version `6.0.94`. 
 
 ## ADDING THE APPROOV SDK ENABLED REFIT PACKAGE
@@ -14,7 +15,6 @@ We will use the latest versions of the `nuget.org` packages, `ApproovSDK-3.1.2`,
  The Approov SDK needs a slightly modified `Refit` package using a specific implementation, and it is  available as a NuGet package in the default repository `nuget.org`. Note that it is not possible to use `Refit` and the `ApproovRefit` packages in the same project so you will need to uninstall the `Refit` package and replace it with the modified `ApproovRefit` one. 
 
 ![Add Refit Package](readme-images/add-refit-package.jpg)
-
 
 ## ADDING THE APPROOV SDK AND THE CUSTOM HTTP CLIENT
 
